@@ -100,7 +100,7 @@
             opacity: 0;
             transition: opacity 0.8s ease 0.3s;
             min-height: 100vh;
-            padding: 30px 20px;
+            padding: 30px 10px;
         }
 
         .game-screen.visible {
@@ -488,6 +488,11 @@
             gap: 8px;
         }
 
+        /* Uzun kelimeler için özel küçük boyut */
+        .sentence-text.long-word {
+            font-size: 1.3rem;
+        }
+
         .empty-square {
             width: 35px;
             height: 35px;
@@ -704,6 +709,11 @@
                 padding: 15px;
             }
             
+            /* Uzun kelimeler için mobilde daha da küçük */
+            .sentence-text.long-word {
+                font-size: 1.1rem;
+            }
+            
             .card-number {
                 font-size: 2.8rem;
             }
@@ -733,6 +743,11 @@
                 font-size: 1.5rem;
             }
             
+            /* Uzun kelimeler için özel boyut */
+            .sentence-text.long-word {
+                font-size: 1.2rem;
+            }
+            
             .card-number {
                 font-size: 3rem;
             }
@@ -753,6 +768,11 @@
             .sentence-text {
                 font-size: 1.3rem;
                 padding: 0 10px;
+            }
+            
+            /* Uzun kelimeler için en küçük boyut */
+            .sentence-text.long-word {
+                font-size: 1.0rem;
             }
             
             .punctuation-btn {
@@ -902,7 +922,7 @@
                 correct: "!"
             },
             {
-                sentence: "Yarın 09(…)05’te çelenk koymaya gideceğiz.",
+                sentence: "Yarın 09(…)05'te çelenk koymaya gideceğiz.",
                 options: [".", ",", "-"],
                 correct: "."
             },
@@ -961,6 +981,11 @@
                 
                 const sentenceText = document.createElement('div');
                 sentenceText.className = 'sentence-text';
+                
+                // Uzun kelimeler için özel class ekle
+                if (data.sentence.includes('KAL(…)Bİ(…)MİZ(…)DE(…)SİN')) {
+                    sentenceText.classList.add('long-word');
+                }
                 
                 // Create sentence with empty square properly
                 const textSpan = document.createElement('span');
