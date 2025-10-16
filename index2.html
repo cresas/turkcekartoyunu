@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Kart Oyunu 🃏</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;600;700;800&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        @charset "UTF-8";
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Open Sans', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* THX Style Star Intro Animation */
+        #thx-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        #thx-intro.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .thx-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #thx-star {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            animation: starReveal 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .thx-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff69b4;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 2px #ff69b4,
+                0 0 4px #ff1493,
+                0 0 8px #ff1493,
+                0 0 12px #ff1493;
+            animation: dotPulse 0.5s ease-in-out infinite alternate;
+            opacity: 0;
+        }
+
+
+
+        @keyframes dotPulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 
+                    0 0 2px #ff69b4,
+                    0 0 4px #ff1493,
+                    0 0 8px #ff1493,
+                    0 0 12px #ff1493;
+            }
+            100% {
+                transform: scale(1.2);
+                box-shadow: 
+                    0 0 4px #ff69b4,
+                    0 0 8px #ff1493,
+                    0 0 16px #ff1493,
+                    0 0 24px #ff1493;
+            }
+        }
+
+        @keyframes starReveal {
+            0% {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+            20% {
+                transform: scale(0.3);
+                opacity: 0.3;
+            }
+            40% {
+                transform: scale(0.6);
+                opacity: 0.6;
+            }
+            60% {
+                transform: scale(0.8);
+                opacity: 0.8;
+            }
+            80% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Exit animation for THX */
+        #thx-intro.exit #thx-star {
+            animation: starExit 1s ease-in forwards;
+        }
+
+        @keyframes starExit {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* Light Sweep Effect - Card15 Style */
+        .light-sweep {
+            position: absolute;
+            top: 0;
+            right: -300%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent 0%, 
+                rgba(255, 105, 180, 0.1) 30%, 
+                rgba(255, 20, 147, 0.3) 50%, 
+                rgba(255, 105, 180, 0.1) 70%, 
+                transparent 100%
+            );
+            animation: lightSweep 2s ease-in-out 1.5s forwards;
+            z-index: 10;
+        }
+
+        @keyframes lightSweep {
+            0% {
+                right: -300%;
+            }
+            100% {
+                right: 200%;
+            }
+        }
+
+        /* Exit animation */
+        .logo-intro.exit .star-container {
+            animation: starExit 1s ease-in forwards;
+        }
+
+        @keyframes starExit {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .thx-skip {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 2001;
+        }
+
+        .thx-skip:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .thx-skip {
+                bottom: 30px;
+                right: 30px;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* EA Games Logo Intro Screen */
+        .ea-logo-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #000 0%, #111 50%, #000 100%);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: all 0.8s ease;
+        }
+
+        .ea-logo-intro.hidden {
+            opacity: 0;
+            transform: scale(3);
+            pointer-events: none;
+        }
+
+        .ea-logo-intro img {
+            max-width: 300px;
+            max-height: 300px;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.5));
+            animation: logoSpinEnter 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes logoSpinEnter {
+            0% {
+                opacity: 0;
+                transform: scale(0.05) rotate(-360deg);
+                filter: blur(20px) drop-shadow(0 0 100px rgba(255,255,255,1));
+            }
+            20% {
+                opacity: 0.3;
+                transform: scale(0.3) rotate(-180deg);
+                filter: blur(15px) drop-shadow(0 0 80px rgba(255,255,255,0.8));
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(0.9) rotate(0deg);
+                filter: blur(5px) drop-shadow(0 0 50px rgba(255,255,255,0.6));
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.2) rotate(20deg);
+                filter: blur(0px) drop-shadow(0 0 40px rgba(255,255,255,0.5));
+            }
+            85% {
+                opacity: 1;
+                transform: scale(0.95) rotate(-5deg);
+                filter: drop-shadow(0 0 30px rgba(255,255,255,0.4));
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 0 35px rgba(255,255,255,0.6));
+            }
+        }
+
+        @keyframes logoSpinExit {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: drop-shadow(0 0 35px rgba(255,255,255,0.6));
+            }
+            25% {
+                opacity: 1;
+                transform: scale(1.3) rotate(180deg);
+                filter: blur(3px) drop-shadow(0 0 60px rgba(255,255,255,0.9));
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(2) rotate(540deg);
+                filter: blur(8px) drop-shadow(0 0 80px rgba(255,255,255,1));
+            }
+            75% {
+                opacity: 0.5;
+                transform: scale(5) rotate(900deg);
+                filter: blur(15px) drop-shadow(0 0 120px rgba(255,255,255,1));
+            }
+            100% {
+                opacity: 0;
+                transform: scale(15) rotate(1440deg);
+                filter: blur(30px) drop-shadow(0 0 200px rgba(255,255,255,1));
+            }
+        }
+
+        .ea-logo-intro.exit img {
+            animation: logoSpinExit 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards;
+        }
+
+        /* Entrance Screen */
+        .entrance-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.8s ease;
+        }
+
+        .entrance-screen.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        .entrance-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: titleBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .entrance-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* First Entrance Screen (Minimal) */
+        #entranceScreen {
+            background: #000; /* Black background for minimal look */
+        }
+        
+        #entranceScreen .start-button {
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 20px 50px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        
+        #entranceScreen .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            font-family: 'Open Sans', 'Fredoka', cursive;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            opacity: 0;
+            transition: opacity 0.8s ease 0.3s;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .game-screen.visible {
+            opacity: 1;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .game-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .game-instructions {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            height: 8px;
+            max-width: 400px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            height: 100%;
+            width: 0%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        /* Cards Container - ULTIMATE RESPONSIVE SYSTEM */
+        /* Base - Large desktop (1850px+) */
+        .cards-container {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 25px !important;
+            max-width: 1400px !important;
+            margin: 0 auto !important;
+            padding: 40px 20px !important;
+            width: 100% !important;
+            justify-items: center !important;
+            align-items: center !important;
+            place-items: center !important;
+        }
+
+        /* Large Desktop responsive (1080-1849px) - FIX FOR SOL ÜSTTE */
+        @media (max-width: 1849px) and (min-width: 1080px) {
+            .cards-container {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 25px !important;
+                max-width: 1200px !important;
+                margin: 0 auto !important;
+                padding: 30px 20px !important;
+                width: 100% !important;
+                justify-items: center !important;
+                align-items: center !important;
+                place-items: center !important;
+                justify-content: center !important;
+            }
+            
+            .card {
+                max-width: 280px !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+            }
+            
+            .card.dealt {
+                transform: translateX(0) translateY(0) scale(1) rotateY(0deg) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 280px !important;
+            }
+        }
+
+        /* Medium Desktop responsive (768-1080px) - FIX FOR SOLDA DİBİNDE */
+        @media (max-width: 1080px) and (min-width: 768px) {
+            .cards-container {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 20px !important;
+                max-width: 900px !important;
+                margin: 0 auto !important;
+                padding: 25px 15px !important;
+                width: 100% !important;
+                justify-items: center !important;
+                align-items: center !important;
+                place-items: center !important;
+                justify-content: center !important;
+            }
+            
+            .card {
+                max-width: 260px !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+            }
+            
+            .card.dealt {
+                transform: translateX(0) translateY(0) scale(1) rotateY(0deg) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 260px !important;
+            }
+        }
+
+        /* Mobile responsive for cards */
+        @media (max-width: 768px) {
+            .cards-container {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+                padding: 15px;
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 auto;
+                justify-items: center !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            .card {
+                max-width: 280px;
+                width: 100% !important;
+                margin: 0 auto !important;
+                transform: translateX(-2000vw) translateY(-2000vh) scale(0.1) rotateY(180deg) !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+            }
+            
+            .card.dealt {
+                transform: translateX(0) translateY(0) scale(1) rotateY(0deg) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 280px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards-container {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                padding: 10px;
+                gap: 15px;
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 auto;
+                justify-items: center !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            .card {
+                max-width: 260px;
+                height: 320px;
+                width: 100% !important;
+                margin: 0 auto !important;
+                transform: translateX(-3000vw) translateY(-3000vh) scale(0.1) rotateY(180deg) !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+            }
+            
+            .card.dealt {
+                transform: translateX(0) translateY(0) scale(1) rotateY(0deg) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 260px !important;
+                height: 320px !important;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            width: 100%;
+            height: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+            opacity: 1;
+            /* Start cards flipped (back showing) at deck position */
+            transform: translateX(-80vw) translateY(-70vh) scale(0.8) rotateY(180deg);
+            transition: none;
+            z-index: 10;
+        }
+
+        .card.dealing {
+            animation: cardDealFlip 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .card.dealt {
+            transform: translateX(0) translateY(0) scale(1) rotateY(0deg);
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        /* Card dealing with flip animation */
+        @keyframes cardDealFlip {
+            0% {
+                opacity: 1;
+                transform: translateX(-80vw) translateY(-70vh) scale(0.8) rotateY(180deg);
+                z-index: 10;
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-40vw) translateY(-35vh) scale(0.9) rotateY(90deg);
+                z-index: 8;
+            }
+            80% {
+                opacity: 1;
+                transform: translateX(-5vw) translateY(-5vh) scale(0.98) rotateY(45deg);
+                z-index: 5;
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) translateY(0) scale(1) rotateY(0deg);
+                z-index: 1;
+            }
+        }
+
+        /* Mobile card dealing animation */
+        @media (max-width: 768px) {
+            @keyframes cardDealFlip {
+                0% {
+                    opacity: 0;
+                    transform: translateX(-5000vw) translateY(-5000vh) scale(0.1) rotateY(180deg);
+                    z-index: 10;
+                    visibility: hidden;
+                }
+                15% {
+                    opacity: 0;
+                    transform: translateX(-3000vw) translateY(-3000vh) scale(0.2) rotateY(160deg);
+                    z-index: 10;
+                    visibility: visible;
+                }
+                25% {
+                    opacity: 1;
+                    transform: translateX(-200vw) translateY(-75vh) scale(0.6) rotateY(135deg);
+                    z-index: 9;
+                }
+                50% {
+                    opacity: 1;
+                    transform: translateX(-100vw) translateY(-37vh) scale(0.8) rotateY(90deg);
+                    z-index: 8;
+                }
+                80% {
+                    opacity: 1;
+                    transform: translateX(-20vw) translateY(-7vh) scale(0.95) rotateY(45deg);
+                    z-index: 5;
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateX(0) translateY(0) scale(1) rotateY(0deg);
+                    z-index: 1;
+                }
+            }
+        }
+
+        @media (max-width: 480px) {
+            @keyframes cardDealFlip {
+                0% {
+                    opacity: 0;
+                    transform: translateX(-6000vw) translateY(-6000vh) scale(0.1) rotateY(180deg);
+                    z-index: 10;
+                    visibility: hidden;
+                }
+                10% {
+                    opacity: 0;
+                    transform: translateX(-4000vw) translateY(-4000vh) scale(0.15) rotateY(170deg);
+                    z-index: 10;
+                    visibility: visible;
+                }
+                25% {
+                    opacity: 1;
+                    transform: translateX(-250vw) translateY(-100vh) scale(0.6) rotateY(135deg);
+                    z-index: 9;
+                }
+                50% {
+                    opacity: 1;
+                    transform: translateX(-125vw) translateY(-50vh) scale(0.8) rotateY(90deg);
+                    z-index: 8;
+                }
+                80% {
+                    opacity: 1;
+                    transform: translateX(-25vw) translateY(-10vh) scale(0.95) rotateY(45deg);
+                    z-index: 5;
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateX(0) translateY(0) scale(1) rotateY(0deg);
+                    z-index: 1;
+                }
+            }
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .card-number {
+            font-family: 'Fredoka', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .sentence-text {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .empty-square {
+            width: 35px;
+            height: 35px;
+            border: 3px solid white;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            animation: pulse 2s infinite;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .empty-square.filled {
+            animation: none;
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(255,255,255,0.7);
+            }
+            50% { 
+                box-shadow: 0 0 0 10px rgba(255,255,255,0);
+            }
+        }
+
+        .punctuation-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .punctuation-btn {
+            width: 60px;
+            height: 60px;
+            border: 3px solid white;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .punctuation-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .punctuation-btn.correct {
+            background: linear-gradient(135deg, #28A745, #20C997) !important;
+            border-color: #28A745 !important;
+            animation: correctPulse 0.6s ease;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.6) !important;
+            color: white !important;
+        }
+
+        .punctuation-btn.incorrect {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52) !important;
+            border-color: #ee5a52 !important;
+            animation: shake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .card.answered {
+            pointer-events: none;
+        }
+
+        .card.answered .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Special Cards - More Vibrant Colors */
+        .card.card-1 .card-front { background: linear-gradient(135deg, #FF6B9D, #FF1B6B); }
+        .card.card-2 .card-front { background: linear-gradient(135deg, #6B73FF, #9B59B6); }
+        .card.card-3 .card-front { background: linear-gradient(135deg, #FF8A00, #FF6B35); }
+        .card.card-4 .card-front { background: linear-gradient(135deg, #4FACFE, #00F2FE); }
+        .card.card-5 .card-front { background: linear-gradient(135deg, #F093FB, #F5576C); }
+        .card.card-6 .card-front { background: linear-gradient(135deg, #FA709A, #FEE140); }
+        .card.card-7 .card-front { background: linear-gradient(135deg, #FF5722, #E65100); }
+        .card.card-8 .card-front { background: linear-gradient(135deg, #9C27B0, #673AB7); }
+
+        /* Success Screen */
+        .success-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+            transition: all 0.8s ease;
+        }
+
+        .success-screen.show {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+
+        .success-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: successBounce 1s ease infinite;
+        }
+
+        @keyframes successBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confetti-fall 1.5s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 35px;
+            font-family: 'Fredoka', cursive;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Mobile Responsive - Improved - OVERRIDE */
+        @media (max-width: 768px) {
+            .cards-container {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+                padding: 15px !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 auto !important;
+                justify-items: center !important;
+                align-items: center !important;
+                justify-content: center !important;
+                place-items: center !important;
+            }
+            
+            .card {
+                height: 280px;
+                /* Better mobile starting position */
+                transform: translateX(-45vw) translateY(-40vh) scale(0.6) rotateY(180deg);
+            }
+            
+            .entrance-title {
+                font-size: 2.5rem;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .sentence-text {
+                font-size: 1.4rem;
+                padding: 15px;
+            }
+            
+            .card-number {
+                font-size: 2.8rem;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                padding: 15px;
+            }
+            
+            .card {
+                height: 300px;
+            }
+            
+            .entrance-title {
+                font-size: 2.5rem;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .sentence-text {
+                font-size: 1.5rem;
+            }
+            
+            .card-number {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .card {
+                height: 280px;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .sentence-text {
+                font-size: 1.3rem;
+                padding: 0 10px;
+            }
+            
+            .punctuation-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .empty-square {
+                width: 30px;
+                height: 30px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- THX Style Star Intro -->
+    <div id="thx-intro">
+        <div class="thx-container">
+            <div id="thx-star"></div>
+            <div class="light-sweep"></div>
+        </div>
+     
+    </div>
+
+    <!-- EA Games Logo Intro -->
+    <div class="ea-logo-intro" id="eaLogoIntro">
+        <img src="logo.png" alt="Logo" id="logoImage">
+       
+    </div>
+
+    <!-- First Simple Start Screen -->
+    <div class="entrance-screen" id="entranceScreen">
+        <button class="start-button" onclick="startThxAfterClick()">
+            Başla
+        </button>
+    </div>
+
+    <!-- Second Game Introduction Screen -->
+    <div class="entrance-screen" id="gameIntroScreen" style="display: none;">
+        <h1 class="entrance-title">🎯 Noktalama Kartları</h1>
+        <p class="entrance-subtitle">
+            Cümlelerin sonundaki doğru noktalama işaretini bulun!<br>
+            Kartları çevirin ve doğru cevabı seçin.
+        </p>
+        <button class="start-button" onclick="startGame()">
+            🎮 Oyuna Başla
+        </button>
+    </div>
+
+    <!-- Game Screen -->
+    <div class="game-screen" id="gameScreen">
+        <div class="game-header">
+       
+            <p class="game-instructions">Kartlara tıklayarak çevirin ve doğru noktalama işaretini seçin</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="cards-container" id="cardsContainer">
+            <!-- Kartlar dinamik olarak oluşturulacak -->
+        </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-screen" id="successScreen">
+        <h1 class="success-title">🎉 TEBRİKLER! 🎉</h1>
+        <p style="color: white; font-size: 1.5rem; text-align: center; margin-bottom: 20px;">
+            Tüm soruları doğru cevapladınız!
+        </p>
+        <button class="restart-button" onclick="window.restartGame(); return false;">
+            🔄 Tekrar Oyna
+        </button>
+        <div style="margin-top: 20px;">
+            <button onclick="window.location.reload(); return false;" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer;">
+                🔄 Sayfayı Yenile
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Sound effects from assets folder - Enhanced audio handling with autoplay fix
+        function playSound(audioFile) {
+            try {
+                // Create new audio instance to avoid conflicts
+                const audio = new Audio(audioFile);
+                audio.volume = 0.7;
+                
+                // Add comprehensive error handling
+                audio.addEventListener('error', (e) => {
+                    console.error('Audio error for', audioFile, ':', e);
+                    console.error('Error details:', e.target.error);
+                });
+                
+                audio.addEventListener('loadstart', () => {
+                    console.log('Loading audio:', audioFile);
+                });
+                
+                audio.addEventListener('canplay', () => {
+                    console.log('Audio ready to play:', audioFile);
+                });
+                
+                audio.addEventListener('loadeddata', () => {
+                    console.log('Audio data loaded:', audioFile);
+                });
+                
+                // Attempt to play with enhanced error handling
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('✅ Audio playing successfully:', audioFile);
+                    }).catch(error => {
+                        console.error('❌ Audio play failed:', audioFile, error);
+                        console.error('This might be due to browser autoplay policy.');
+                        
+                        // If it's the THX sound and autoplay failed, show a notice
+                        if (audioFile.includes('thx.mp3')) {
+                            console.warn('THX sound blocked by browser. User interaction may be required.');
+                        }
+                    });
+                }
+                
+                return audio;
+            } catch (error) {
+                console.error('Error creating audio:', audioFile, error);
+                return null;
+            }
+        }
+        
+        // Pre-defined sound files
+        const soundFiles = {
+            start: 'assets/start.mp3',
+            flip: 'assets/flip.mp3',
+            flip2: 'assets/flip2.mp3',
+            true: 'assets/true.mp3',
+            false: 'assets/false.mp3',
+            conq: 'assets/conq.mp3',
+            dealcard: 'assets/dealcard.mp3',
+            thx: 'assets/thx.mp3'
+        };
+
+        // Skip Intro Function - ULTIMATE VERSION - Directly starts game
+        function skipIntro() {
+            console.log('🚀 ULTIMATE SKIP: Bypassing ALL intros, going directly to game...');
+            
+            // Stop THX.mp3 specifically first
+            try {
+                if (window.thxAudio) {
+                    window.thxAudio.pause();
+                    window.thxAudio.currentTime = 0;
+                    window.thxAudio.src = '';
+                    window.thxAudio = null;
+                }
+            } catch(e) {}
+            
+            // NUCLEAR AUDIO STOP - Stop every possible audio source
+            document.querySelectorAll('audio').forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.src = '';
+                audio.load(); // Force reload to clear
+                audio.volume = 0; // Mute completely
+                audio.muted = true;
+            });
+            
+            // Stop ALL Web Audio API contexts if any
+            if (window.AudioContext || window.webkitAudioContext) {
+                try {
+                    if (window.audioContext) {
+                        window.audioContext.suspend();
+                        window.audioContext.close();
+                    }
+                } catch(e) {}
+            }
+            
+            // BRUTE FORCE: Clear ALL possible timers and intervals
+            for (let i = 1; i < 999999; i++) {
+                window.clearTimeout(i);
+                window.clearInterval(i);
+            }
+            
+            // Hide ALL intro screens immediately and completely
+            const thxIntro = document.getElementById('thx-intro');
+            const eaLogoIntro = document.getElementById('eaLogoIntro');
+            const gameIntroScreen = document.getElementById('gameIntroScreen');
+            const entranceScreen = document.getElementById('entranceScreen');
+            
+            // Force hide all intros
+            [thxIntro, eaLogoIntro, gameIntroScreen, entranceScreen].forEach(element => {
+                if (element) {
+                    element.style.display = 'none';
+                    element.style.opacity = '0';
+                    element.style.visibility = 'hidden';
+                    element.style.zIndex = '-9999';
+                    element.classList.add('hidden');
+                }
+            });
+            
+            // DIRECT GAME START - Bypass all intro sequences
+            setTimeout(() => {
+                // Show game screen immediately
+                const gameScreen = document.getElementById('gameScreen');
+                if (gameScreen) {
+                    gameScreen.classList.add('visible');
+                    gameScreen.style.opacity = '1';
+                    gameScreen.style.display = 'block';
+                }
+                
+                // Start the card game immediately
+                setTimeout(() => {
+                    createCards();
+                }, 100);
+            }, 50);
+            
+            console.log('🎯 ULTIMATE SKIP COMPLETED: Game started directly!');
+        }
+
+        // THX Star Animation Functions
+        function createThxIntro() {
+            const thxStar = document.getElementById('thx-star');
+            thxStar.innerHTML = '';
+            
+            // Create star pattern coordinates (5-pointed star)
+            const centerX = 200;
+            const centerY = 200;
+            const outerRadius = 150;
+            const innerRadius = 60;
+            
+            // Generate star pattern with dots
+            const starPoints = [];
+            
+            // Create 5-pointed star outline
+            for (let i = 0; i < 10; i++) {
+                const angle = (i * Math.PI) / 5;
+                const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                const x = centerX + radius * Math.cos(angle - Math.PI / 2);
+                const y = centerY + radius * Math.sin(angle - Math.PI / 2);
+                starPoints.push({ x, y });
+            }
+            
+            // Fill star with dots
+            for (let row = 0; row < 400; row += 8) {
+                for (let col = 0; col < 400; col += 8) {
+                    if (isPointInStar(col, row, starPoints)) {
+                        const dot = document.createElement('div');
+                        dot.className = 'thx-dot';
+                        dot.style.left = col + 'px';
+                        dot.style.top = row + 'px';
+                        
+                        // Random delay for dramatic reveal
+                        const delay = Math.random() * 2000 + 500;
+                        dot.style.animationDelay = delay + 'ms';
+                        
+                        setTimeout(() => {
+                            dot.style.opacity = '1';
+                        }, delay);
+                        
+                        thxStar.appendChild(dot);
+                    }
+                }
+            }
+        }
+        
+        function isPointInStar(x, y, starPoints) {
+            let inside = false;
+            for (let i = 0, j = starPoints.length - 1; i < starPoints.length; j = i++) {
+                if (((starPoints[i].y > y) !== (starPoints[j].y > y)) &&
+                    (x < (starPoints[j].x - starPoints[i].x) * (y - starPoints[i].y) / (starPoints[j].y - starPoints[i].y) + starPoints[i].x)) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+
+        // Game data
+        const gameData = [
+            {
+                sentence: "Eyvah, işe geç kaldım",
+                emptySquare: true,
+                options: [".", "!", "?"],
+                correct: "!"
+            },
+            {
+                sentence: "Bugün hava çok güzel",
+                options: [".", "!", "?"],
+                correct: "."
+            },
+            {
+                sentence: "Sen nerede yaşıyorsun",
+                options: [".", "!", "?"],
+                correct: "?"
+            },
+            {
+                sentence: "Kitabı masanın üzerine koy",
+                options: [".", "!", "?"],
+                correct: "."
+            },
+            {
+                sentence: "Dikkat et, yolda araba var",
+                options: [".", "!", "?"],
+                correct: "!"
+            },
+            {
+                sentence: "Saat kaç oldu acaba",
+                options: [".", "!", "?"],
+                correct: "?"
+            },
+            {
+                sentence: "Bu soruyu çözemiyorum",
+                options: [".", "!", "?"],
+                correct: "."
+            },
+            {
+                sentence: "Haydi, hızlı ol",
+                options: [".", "!", "?"],
+                correct: "!"
+            }
+        ];
+
+        let currentCard = 0;
+        let correctAnswers = 0;
+
+        function playThxIntro() {
+            // Try to play THX sound immediately
+            console.log('🎵 Attempting to play THX sound...');
+            playSound(soundFiles.thx);
+            
+            // Show THX intro and create star
+            const thxIntro = document.getElementById('thx-intro');
+            thxIntro.style.display = 'flex';
+            
+            // Create the THX star animation
+            createThxIntro();
+            
+            // After 4 seconds (time for star to fully reveal), start exit animation
+            setTimeout(() => {
+                thxIntro.classList.add('exit');
+                
+                // After exit animation (1s), show game intro screen
+                setTimeout(() => {
+                    thxIntro.classList.add('hidden');
+                    thxIntro.style.display = 'none';
+                    
+                    // Show second entrance screen (game intro) with title and description
+                    setTimeout(() => {
+                        const gameIntroScreen = document.getElementById('gameIntroScreen');
+                        gameIntroScreen.style.display = 'flex';
+                        gameIntroScreen.classList.remove('hidden');
+                    }, 200);
+                }, 1000);
+            }, 4000);
+        }
+
+        // Enable audio context on first user interaction
+        function enableAudioContext() {
+            document.addEventListener('click', function enableAudio() {
+                console.log('🔊 User interaction detected, enabling audio context...');
+                // Create a silent audio to unlock audio context
+                const silentAudio = new Audio();
+                silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQQAAAAAAA==';
+                silentAudio.play().catch(() => {});
+                
+                // Remove this listener after first interaction
+                document.removeEventListener('click', enableAudio);
+            }, { once: true });
+        }
+
+        function startGame() {
+            // Play start sound
+            playSound(soundFiles.start);
+            
+            // Hide game intro screen
+            document.getElementById('gameIntroScreen').classList.add('hidden');
+            
+            // Show EA Games logo intro
+            const eaLogoIntro = document.getElementById('eaLogoIntro');
+            eaLogoIntro.style.display = 'flex';
+            
+            // After 2 seconds, start dramatic exit animation
+            setTimeout(() => {
+                eaLogoIntro.classList.add('exit');
+                
+                // After exit animation (0.8s), completely hide logo and start game
+                setTimeout(() => {
+                    eaLogoIntro.classList.add('hidden');
+                    
+                    // Show game screen and start dealing cards
+                    setTimeout(() => {
+                        document.getElementById('gameScreen').classList.add('visible');
+                        
+                        // Wait a bit more before dealing cards
+                        setTimeout(() => {
+                            createCards();
+                        }, 300);
+                    }, 200);
+                }, 800);
+            }, 2000);
+        }
+
+        function createCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+
+            // Create all cards but keep them hidden initially
+            gameData.forEach((data, index) => {
+                const card = document.createElement('div');
+                card.className = `card card-${index + 1}`;
+                card.setAttribute('data-index', index);
+
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-inner';
+
+                // Front face
+                const cardFront = document.createElement('div');
+                cardFront.className = 'card-face card-front';
+                cardFront.innerHTML = `
+                    <div class="card-icon">🎴</div>
+                    <div class="card-number">${index + 1}</div>
+                `;
+
+                // Back face
+                const cardBack = document.createElement('div');
+                cardBack.className = 'card-face card-back';
+                
+                const sentenceText = document.createElement('div');
+                sentenceText.className = 'sentence-text';
+                
+                // Create sentence with empty square properly
+                const textSpan = document.createElement('span');
+                textSpan.textContent = data.sentence;
+                
+                const emptySquare = document.createElement('div');
+                emptySquare.className = 'empty-square';
+                emptySquare.setAttribute('data-card-index', index);
+                
+                sentenceText.appendChild(textSpan);
+                sentenceText.appendChild(emptySquare);
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'punctuation-options';
+
+                data.options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = 'punctuation-btn';
+                    btn.textContent = option;
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        
+                        // Check if card flip animation is complete
+                        const cardElement = e.target.closest('.card');
+                        if (!cardElement.classList.contains('flipped')) {
+                            // Card is not flipped yet, ignore click
+                            return;
+                        }
+                        
+                        // Add small delay to ensure flip animation is complete
+                        const timeSinceFlip = Date.now() - (cardElement.dataset.flipTime || 0);
+                        if (timeSinceFlip < 800) { // 0.8s flip animation duration
+                            console.log('Flip animation still in progress, waiting...');
+                            setTimeout(() => {
+                                checkAnswer(index, option, data.correct, btn);
+                            }, 800 - timeSinceFlip + 50); // Small buffer
+                            return;
+                        }
+                        
+                        checkAnswer(index, option, data.correct, btn);
+                    };
+                    optionsContainer.appendChild(btn);
+                });
+
+                cardBack.appendChild(sentenceText);
+                cardBack.appendChild(optionsContainer);
+
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+                card.appendChild(cardInner);
+
+                // Add click event for flipping and unflipping
+                card.addEventListener('click', (e) => {
+                    // Avoid triggering when clicking buttons
+                    if (e.target.classList.contains('punctuation-btn')) return;
+                    
+                    if (!card.classList.contains('answered')) {
+                        if (!card.classList.contains('flipped')) {
+                            // Open card
+                            playSound(soundFiles.flip);
+                            card.classList.add('flipped');
+                            
+                            // Disable all punctuation buttons during flip animation
+                            const punctuationBtns = card.querySelectorAll('.punctuation-btn');
+                            punctuationBtns.forEach(btn => {
+                                btn.style.pointerEvents = 'none';
+                                btn.style.opacity = '0.6';
+                            });
+                            
+                            // Record flip time for animation control
+                            const currentTime = Date.now();
+                            card.dataset.flipTime = currentTime;
+                            
+                            // Disable card clicking during animation
+                            card.style.pointerEvents = 'none';
+                            
+                            // Enable buttons and card clicking after flip animation completes (800ms)
+                            setTimeout(() => {
+                                punctuationBtns.forEach(btn => {
+                                    btn.style.pointerEvents = 'auto';
+                                    btn.style.opacity = '1';
+                                });
+                                card.style.pointerEvents = 'auto';
+                            }, 800);
+                        } else {
+                            // Close card - only if not answered AND not during animation
+                            const flipTime = parseInt(card.dataset.flipTime || 0);
+                            const now = Date.now();
+                            
+                            // Don't allow closing if flip animation is still running
+                            if (flipTime > 0 && now - flipTime < 800) {
+                                console.log("Can't close card during flip animation");
+                                return;
+                            }
+                            
+                            playSound(soundFiles.flip2);
+                            card.classList.remove('flipped');
+                            // Clear flip time
+                            card.dataset.flipTime = 0;
+                        }
+                    }
+                });
+
+                container.appendChild(card);
+            });
+
+            // Deal cards one by one with animation and sound
+            dealCardsWithAnimation();
+        }
+
+        function dealCardsWithAnimation() {
+            const cards = document.querySelectorAll('.card');
+            
+            // Set initial stacking order (highest index on top)
+            cards.forEach((card, index) => {
+                card.style.zIndex = cards.length - index + 20; // Stack them properly
+            });
+            
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    // Play deal sound (1 second duration)
+                    playSound(soundFiles.dealcard);
+                    
+                    // Add dealing animation
+                    card.classList.add('dealing');
+                    
+                    // Listen for animation end
+                    card.addEventListener('animationend', function handleAnimationEnd() {
+                        card.classList.remove('dealing');
+                        card.classList.add('dealt');
+                        card.removeEventListener('animationend', handleAnimationEnd);
+                    });
+                    
+                }, index * 1000); // 1 second delay between each card (matches dealcard.mp3 duration)
+            });
+        }
+
+        function checkAnswer(cardIndex, selected, correct, button) {
+            const card = document.querySelector(`[data-index="${cardIndex}"]`);
+            
+            // Check if flip animation is still in progress for this specific card
+            const flipTime = parseInt(card.dataset.flipTime || 0);
+            const now = Date.now();
+            if (flipTime > 0 && now - flipTime < 800) { // 800ms matches CSS animation duration
+                console.log("Flip animation in progress. Click ignored.");
+                return; // Ignore the click
+            }
+            
+            const options = card.querySelectorAll('.punctuation-btn');
+            
+            // Disable all buttons
+            options.forEach(btn => btn.style.pointerEvents = 'none');
+
+            if (selected === correct) {
+                // Play success sound
+                playSound(soundFiles.true);
+                
+                button.classList.add('correct');
+                correctAnswers++;
+                
+                // Fill the empty square with the correct punctuation
+                const emptySquare = card.querySelector(`[data-card-index="${cardIndex}"]`);
+                if (emptySquare) {
+                    emptySquare.textContent = selected;
+                    emptySquare.classList.add('filled');
+                    console.log('Empty square filled with:', selected); // Debug log
+                } else {
+                    console.log('Empty square not found!'); // Debug log
+                }
+                
+                // Mark card as answered
+                setTimeout(() => {
+                    card.classList.add('answered');
+                    updateProgress();
+                    
+                    // Check if all cards are answered
+                    if (correctAnswers === gameData.length) {
+                        setTimeout(() => {
+                            playSound(soundFiles.conq);
+                            showSuccess();
+                        }, 1000);
+                    }
+                }, 500);
+            } else {
+                // Play error sound
+                playSound(soundFiles.false);
+                
+                button.classList.add('incorrect');
+                
+                // Wait 800ms, then play flip2 sound and close card
+                setTimeout(() => {
+                    playSound(soundFiles.flip2);
+                    
+                    // Small delay for flip2 sound to start, then flip card
+                    setTimeout(() => {
+                        card.classList.remove('flipped');
+                        button.classList.remove('incorrect');
+                        options.forEach(btn => btn.style.pointerEvents = 'auto');
+                    }, 100);
+                }, 800);
+            }
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const percentage = (correctAnswers / gameData.length) * 100;
+            progressFill.style.width = percentage + '%';
+        }
+
+        function showSuccess() {
+            // Create confetti
+            createConfetti();
+            
+            // Show success screen
+            document.getElementById('successScreen').classList.add('show');
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#a29bfe'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 1.5 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        function restartGame() {
+            console.log('🔄 RESTART: Force restart initiated...');
+            
+            // Method 1: Try soft restart first
+            try {
+                // Reset ALL global variables
+                window.currentCard = 0;
+                window.correctAnswers = 0;
+                currentCard = 0;
+                correctAnswers = 0;
+                
+                console.log('✅ Variables reset');
+                
+                // Force hide success screen with multiple methods
+                const successScreen = document.getElementById('successScreen');
+                if (successScreen) {
+                    successScreen.classList.remove('show');
+                    successScreen.style.display = 'none !important';
+                    successScreen.style.visibility = 'hidden';
+                    successScreen.style.opacity = '0';
+                    console.log('✅ Success screen hidden');
+                }
+                
+                // Reset progress bar
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    progressFill.style.width = '0%';
+                    progressFill.style.transition = 'none';
+                    console.log('✅ Progress reset');
+                }
+                
+                // FORCE clear ALL cards and their states
+                const cardsContainer = document.getElementById('cardsContainer');
+                if (cardsContainer) {
+                    // First try to reset existing cards
+                    const existingCards = cardsContainer.querySelectorAll('.card');
+                    existingCards.forEach(card => {
+                        card.classList.remove('answered', 'flipped', 'dealing', 'dealt');
+                        card.dataset.flipTime = '0';
+                        
+                        // Reset button states
+                        const buttons = card.querySelectorAll('.punctuation-btn');
+                        buttons.forEach(btn => {
+                            btn.classList.remove('correct', 'incorrect');
+                            btn.style.pointerEvents = 'auto';
+                            btn.style.opacity = '1';
+                        });
+                        
+                        // Reset empty squares
+                        const squares = card.querySelectorAll('.empty-square');
+                        squares.forEach(sq => {
+                            sq.textContent = '';
+                            sq.classList.remove('filled');
+                        });
+                    });
+                    
+                    // Then completely clear and recreate
+                    cardsContainer.innerHTML = '';
+                    console.log('✅ Cards cleared');
+                }
+                
+                // Clean up any animations/effects
+                const confetti = document.querySelectorAll('.confetti');
+                confetti.forEach(c => c.remove());
+                
+                // Force recreation of cards
+                setTimeout(() => {
+                    console.log('🔧 Creating new cards...');
+                    createCards();
+                    
+                    // Double-check success screen is hidden
+                    if (successScreen) {
+                        successScreen.style.display = 'none';
+                        successScreen.classList.remove('show');
+                    }
+                    
+                    console.log('🎉 RESTART COMPLETE!');
+                }, 300);
+                
+            } catch (error) {
+                console.error('❌ Soft restart failed:', error);
+                console.log('🔄 Attempting hard refresh...');
+                
+                // Method 2: Hard refresh if soft restart fails
+                window.location.reload(true);
+            }
+        }
+
+        // Auto-load but wait for user interaction to start THX intro
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎮 Game loaded successfully - VERSION 3.0');
+            console.log('📝 Changes: No green cards, gold correct answers, enhanced restart');
+            
+            // Enable audio context for modern browsers
+            enableAudioContext();
+            
+            // Make restart function globally available
+            window.restartGame = restartGame;
+            
+            // Debug function for console testing
+            window.testRestart = function() {
+                console.log('🧪 TEST: Manual restart triggered');
+                restartGame();
+            };
+            
+            // Debug function to check game state
+            window.checkGameState = function() {
+                console.log('🔍 Game State Check:');
+                console.log('- currentCard:', currentCard);
+                console.log('- correctAnswers:', correctAnswers);
+                console.log('- Cards container children:', document.getElementById('cardsContainer').children.length);
+                console.log('- Success screen visible:', document.getElementById('successScreen').classList.contains('show'));
+                console.log('- Restart button exists:', !!document.querySelector('.restart-button'));
+            };
+            
+            console.log('🔧 Debug functions available: window.testRestart(), window.checkGameState()');
+            
+            // Add event listener for restart button - use delegation for reliability
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('restart-button')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🔄 Restart button clicked via delegation');
+                    restartGame();
+                }
+            });
+            
+            // Also try direct listener for backup
+            setTimeout(() => {
+                const restartButton = document.querySelector('.restart-button');
+                if (restartButton) {
+                    console.log('✅ Found restart button, adding direct listener');
+                    restartButton.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🔄 Restart button clicked via direct listener');
+                        restartGame();
+                    });
+                } else {
+                    console.warn('⚠️ Restart button not found during direct listener setup');
+                }
+            }, 1000);
+            
+            // Check if THX file exists
+            fetch(soundFiles.thx, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ THX.mp3 file found');
+                    } else {
+                        console.warn('⚠️ THX.mp3 file not found or empty');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ THX.mp3 file check failed:', error);
+                });
+            
+            // Show entrance screen immediately (no auto THX intro)
+            setTimeout(() => {
+                document.getElementById('entranceScreen').style.display = 'flex';
+                document.getElementById('entranceScreen').classList.remove('hidden');
+            }, 500);
+        });
+
+        // Function to start THX intro after user interaction
+        function startThxAfterClick() {
+            // Hide entrance screen first
+            document.getElementById('entranceScreen').style.display = 'none';
+            
+            // Start THX intro
+            playThxIntro();
+        }
+    </script>
+</body>
+</html>
